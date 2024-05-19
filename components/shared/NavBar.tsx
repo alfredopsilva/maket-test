@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,10 +10,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "@/context/ThemeProvider";
 
 const NavBar = () => {
+  const { theme, setTheme } = useTheme();
+
+  const handleTheme = (theme: string) => {
+    setTheme(theme);
+    localStorage.setItem("theme", theme);
+  };
+
   return (
-    <header className="w-screen flex justify-end p-4">
+    <header className="w-screen flex justify-end p-4 ">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
@@ -22,15 +31,15 @@ const NavBar = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {/* <DropdownMenuItem onClick={() => setTheme("light")}> */}
-          {/*   Light */}
-          {/* </DropdownMenuItem> */}
-          {/* <DropdownMenuItem onClick={() => setTheme("dark")}> */}
-          {/*   Dark */}
-          {/* </DropdownMenuItem> */}
-          {/* <DropdownMenuItem onClick={() => setTheme("system")}> */}
-          {/*   System */}
-          {/* </DropdownMenuItem> */}
+          <DropdownMenuItem onClick={() => handleTheme("light")}>
+            Light
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleTheme("dark")}>
+            Dark
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleTheme("system")}>
+            System
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
