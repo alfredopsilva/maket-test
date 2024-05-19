@@ -18,8 +18,9 @@ const NavBar = () => {
     localStorage.setItem("theme", theme);
   };
 
+  const userId = true;
   return (
-    <header className="w-screen flex justify-end p-4 ">
+    <header className="w-screen flex justify-end p-4 gap-4 ">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           {/* NOTE: After the button is clicked, check from where another bother / outiline is comming from. */}
@@ -48,6 +49,7 @@ const NavBar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      {userId && <Button variant={"destructive"}>Logout</Button>}
     </header>
   );
 };
