@@ -56,10 +56,10 @@ const Page = () => {
               id="profile-photo"
               type="file"
               accept="image/*"
-              className="file-input"
+              className="file-input text-white"
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full dark:bg-accentColor">
             Sign Up
           </Button>
         </form>
