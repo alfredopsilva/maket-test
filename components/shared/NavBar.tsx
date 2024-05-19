@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,16 +9,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/context/ThemeProvider";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   const { theme, setTheme } = useTheme();
+  const router = useRouter();
 
   const handleTheme = (theme: string) => {
     setTheme(theme);
     localStorage.setItem("theme", theme);
   };
 
-  const userId = true;
+  const [userId, setUserId] = useState(true);
+
+  const handleLogout = () => {
+    router.push("/login");
+    setUserId(false);
+  };
   return (
     <header className="w-screen flex justify-end p-4 gap-4 ">
       <DropdownMenu>
@@ -49,7 +56,11 @@ const NavBar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {userId && <Button variant={"destructive"}>Logout</Button>}
+      {userId && (
+        <Button variant={"destructive"} onClick={handleLogout}>
+          Logout
+        </Button>
+      )}
     </header>
   );
 };
