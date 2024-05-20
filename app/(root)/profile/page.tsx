@@ -1,23 +1,26 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Image from "next/image";
+import { getUserById } from "@/lib/actions/user.actions";
 
-const Page = () => {
-  const admin = true;
-  const id = 1;
+const Page = async () => {
+  const id = "5eea8b0f-3666-4814-9bab-fe0f9c00d8af";
+
+  const user = await getUserById(id);
+
   return (
     <section className="flex flex-col items-center gap-5 max-w-lg">
       <div className="">
         <Avatar className="w-24 h-24">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage
+            src={user?.profileImage ? user.profileImage : "/images/admin.webp"}
+          />
+          <AvatarFallback>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
         </Avatar>
       </div>
       <div>
         <div className="flex gap-3 items-center">
-          <h3 className="text-3xl dark:text-accentColor"> Alfredo Silva</h3>
+          <h3 className="text-3xl dark:text-accentColor">{`${user?.firstName} ${user?.lastName}`}</h3>
           <Link href={`/profile/${id}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -33,23 +36,11 @@ const Page = () => {
           </Link>
         </div>
         <p className="text-sm text-center text-gray-500 dark:text-gray-400">
-          {admin ? "Admin" : "User"}
+          {user?.isAdmin ? "Admin" : "User"}
         </p>
       </div>
       <div className="">
-        <p className="text-justify text-sm text-slate-600">
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-          commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-          Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis
-          sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
-          consectetur et est culpa et culpa duis.
-        </p>
+        <p className="text-justify text-sm text-slate-600">{user?.bio}</p>
       </div>
     </section>
   );
