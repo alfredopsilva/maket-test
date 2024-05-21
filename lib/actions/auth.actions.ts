@@ -32,7 +32,7 @@ export async function login(loginData: LoginParams): Promise<LoginResponse> {
   } else {
     console.log(isValidPassword);
     // User authenticated successfully, redirect to profile
-    const profileUrl = `${BASE_URL}/profile`;
+    const profileUrl = `${BASE_URL}/profile/${user.id}`;
     return { redirectUrl: profileUrl };
   }
 }
