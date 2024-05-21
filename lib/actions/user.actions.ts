@@ -17,3 +17,24 @@ export async function getUserById(id: string) {
     await db.$disconnect();
   }
 }
+
+export async function getUserByEmail(email: string) {
+  const db = new PrismaClient();
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await db.$disconnect();
+  }
+}

@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/lib/actions/auth.actions";
 
 export function LoginForm() {
   return (
@@ -22,10 +22,11 @@ export function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
+          <form className="grid gap-4" action={login}>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
+                name="email"
                 id="email"
                 type="email"
                 placeholder="m@example.com"
@@ -42,12 +43,12 @@ export function LoginForm() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" name="password" type="password" required />
             </div>
             <Button type="submit" className="w-full dark:bg-accentColor">
               Login
             </Button>
-          </div>
+          </form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="underline">
