@@ -27,10 +27,6 @@ export async function getUserByEmail(email: string) {
       },
     });
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-
     return user;
   } catch (error) {
     console.log(error);

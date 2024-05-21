@@ -8,3 +8,20 @@ export interface User {
   bio: string | null;
   isAdmin: boolean;
 }
+
+export interface LoginParams {
+  email: string;
+  password: string;
+}
+
+export interface ErrorResponse {
+  errors: {
+    [key: string]: string[];
+  };
+}
+
+export interface SuccessResponse {
+  redirectUrl: string;
+}
+
+export type LoginResponse = ErrorResponse | SuccessResponse;
