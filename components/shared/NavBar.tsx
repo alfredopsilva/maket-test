@@ -10,22 +10,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/context/ThemeProvider";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthProvider";
 
 const NavBar = () => {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   const router = useRouter();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const handleTheme = (theme: string) => {
     setTheme(theme);
     localStorage.setItem("theme", theme);
   };
 
-  const [userId, setUserId] = useState(true);
-
   const handleLogout = () => {
+    setIsLoggedIn(false);
     router.push("/login");
-    setUserId(false);
   };
+
   return (
     <header className="w-screen flex justify-end p-4 gap-4 ">
       <DropdownMenu>
@@ -56,7 +57,7 @@ const NavBar = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {userId && (
+      {isLoggedIn && (
         <Button variant={"destructive"} onClick={handleLogout}>
           Logout
         </Button>

@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { login } from "@/lib/actions/auth.actions";
 import { useRouter } from "next/navigation";
 import { LoginResponse, ErrorResponse, SuccessResponse } from "@/types";
-
+import { useAuth } from "@/context/AuthProvider";
 // Type Guards to properly handle the response from the login function. If the response is an ErrorResponse, we set the errors on the form. If the response is a SuccessResponse, we redirect the user to the profile page.
 function isErrorResponse(response: LoginResponse): response is ErrorResponse {
   return (response as ErrorResponse).errors !== undefined;
@@ -31,6 +31,7 @@ function isSuccessResponse(
 
 export function LoginForm() {
   const router = useRouter();
+  const { setIsLoggedIn } = useAuth();
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -49,6 +50,7 @@ export function LoginForm() {
           });
         });
       } else if (isSuccessResponse(response)) {
+        setIsLoggedIn(true);
         router.push(response.redirectUrl);
       }
     } catch (error) {
