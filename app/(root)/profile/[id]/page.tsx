@@ -7,11 +7,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const user = await getUserById(params.id);
 
   if (!user) return;
+  // BUG: set as a private route.
 
   return (
     <section className="flex flex-col items-center gap-5 max-w-lg">
       <div className="">
-        <h1>{params.id}</h1>
         <Avatar className="w-24 h-24">
           <AvatarImage
             src={user?.profileImage ? user.profileImage : "/images/admin.webp"}
@@ -41,7 +41,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
         </p>
       </div>
       <div className="">
-        <p className="text-justify text-sm text-slate-600">{user?.bio}</p>
+        <p className="text-justify text-sm text-slate-600">
+          {user?.bio ? user?.bio : "Update your bio!"}
+        </p>
       </div>
     </section>
   );

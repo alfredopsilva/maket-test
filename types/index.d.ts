@@ -25,3 +25,12 @@ export interface SuccessResponse {
 }
 
 export type LoginResponse = ErrorResponse | SuccessResponse;
+
+export interface UserParams {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  repeatPassword?: string;
+  bio?: string;
+}
