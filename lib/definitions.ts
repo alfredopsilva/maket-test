@@ -22,6 +22,7 @@ export const EditProfileSchema = z.object({
     })
     .optional(),
   bio: z.string().min(10).max(500).optional(),
+  profileImage: z.any().optional(),
 });
 
 export type FormState =

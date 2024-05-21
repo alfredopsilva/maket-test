@@ -33,4 +33,22 @@ export interface UserParams {
   password?: string;
   repeatPassword?: string;
   bio?: string;
+  profileImage?: FileList;
+}
+
+export interface UpdateUserResponse {
+  redirectUrl?: string;
+  message?: string;
+  errors?: {
+    password?: string[];
+    repeatPassword?: string[];
+  };
+  user?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    bio: string;
+    profilePhoto?: string;
+  };
 }

@@ -7,8 +7,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
   const user = await getUserById(params.id);
 
   if (!user) return;
-  // BUG: set as a private route.
-
+  // BUG: set as a private route
   return (
     <section className="flex flex-col items-center gap-5 max-w-lg">
       <div className="">

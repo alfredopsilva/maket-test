@@ -19,8 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { updateUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
-import { LoginResponse, ErrorResponse, SuccessResponse } from "@/types";
-
+import { UpdateUserResponse } from "@/types";
+import { revalidatePath } from "next/cache";
 interface EditProfileFormProps {
   user: string;
 }
@@ -42,10 +42,34 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
   });
 
   async function onSubmit(data: z.infer<typeof EditProfileSchema>) {
-    const response = await updateUser(parsedUser.id, data);
-    if (response?.redirectUrl) {
-      router.push(response.redirectUrl);
-    } else if (response?.message) {
+    const formData = new FormData();
+    for (const key in data) {
+      if (
+        key === "profileImage" &&
+        data.profileImage instanceof FileList &&
+        data.profileImage[0]
+      ) {
+        formData.append(key, data.profileImage[0]);
+      } else {
+        // NOTE: Check how to properly check this types for TS Compiler.
+        formData.append(key, data[key] as string);
+      }
+    }
+
+    const response: UpdateUserResponse = await updateUser(
+      parsedUser.id,
+      formData,
+    );
+
+    if (response.redirectUrl) {
+      setMessage(
+        `${response.message}. You will be redirected to your profile in 3 seconds.`,
+      );
+      setTimeout(() => {
+        // NOTE: Try to find a better way to redirect.
+        window.location.href = response.redirectUrl as string;
+      }, 3000);
+    } else if (response.message) {
       setMessage(response.message);
     }
   }
@@ -126,21 +150,16 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
               </p>
             )}
           </div>
-          {/* <div className="grid gap-2"> */}
-          {/*   <Label htmlFor="profile-photo">Profile Photo</Label> */}
-          {/*   <Input */}
-          {/*     id="profile-photo" */}
-          {/*     type="file" */}
-          {/*     accept="image/*" */}
-          {/*     className="file-input text-white" */}
-          {/*     {...register("profilePhoto")} */}
-          {/*   /> */}
-          {/*   {errors.profilePhoto && ( */}
-          {/*     <p className="text-sm text-red-700"> */}
-          {/*       {errors.profilePhoto.message} */}
-          {/*     </p> */}
-          {/*   )} */}
-          {/* </div> */}
+          <div className="grid gap-2">
+            <Label htmlFor="profile-image">Profile Photo</Label>
+            <Input
+              id="profile-image"
+              type="file"
+              accept="image/*"
+              className="file-input text-white"
+              {...register("profileImage")}
+            />
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="bio">Bio</Label>
             <Textarea
