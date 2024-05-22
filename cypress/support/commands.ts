@@ -35,3 +35,6 @@
 //     }
 //   }
 // }
+//
+import "cypress-file-upload";
+

@@ -6,8 +6,14 @@ export const LoginFormSchema = z.object({
 });
 
 export const EditProfileSchema = z.object({
-  firstName: z.string().min(2).optional(),
-  lastName: z.string().min(2).optional(),
+  firstName: z
+    .string()
+    .min(3, { message: "First Name must be at least 3 characters" })
+    .optional(),
+  lastName: z
+    .string()
+    .min(3, { message: "Last Name must be at least 3 characters" })
+    .optional(),
   email: z.string().email({ message: "Please enter a valid email" }).optional(),
   password: z
     .string()

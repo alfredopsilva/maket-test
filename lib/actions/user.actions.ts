@@ -62,10 +62,7 @@ export async function updateUser(
     // Check if passwords match
     if (fields.password !== fields.repeatPassword) {
       return {
-        errors: {
-          password: ["Passwords do not match"],
-          repeatPassword: ["Passwords do not match"],
-        },
+        message: "Passwords do not match",
       };
     }
 

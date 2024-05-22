@@ -52,3 +52,7 @@ export interface UpdateUserResponse {
     profilePhoto?: string;
   };
 }
+
+export type CustomCypressContext = {
+  userId: string;
+};

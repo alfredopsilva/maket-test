@@ -84,76 +84,113 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
   return (
     <Card className="mx-auto max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl">Edit Your Profile </CardTitle>
-        <CardDescription>Now You can Edit your Profile.</CardDescription>
+        <CardTitle data-cy="edit-title" className="text-2xl">
+          Edit Your Profile
+        </CardTitle>
+        <CardDescription data-cy="edit-description">
+          Now you can edit your profile.
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="grid gap-4"
+          data-cy="edit-form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="grid gap-4 grid-cols-2">
             <div className="grid gap-2">
-              <Label htmlFor="first-name">First Name</Label>
+              <Label htmlFor="first-name" data-cy="first-name-label">
+                First Name
+              </Label>
               <Input
                 id="first-name"
                 type="text"
+                data-cy="first-name-input"
                 placeholder="John"
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-sm text-red-700">
+                <p className="text-sm text-red-700" data-cy="first-name-error">
                   {errors.firstName.message}
                 </p>
               )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="last-name">Last Name</Label>
+              <Label htmlFor="last-name" data-cy="last-name-label">
+                Last Name
+              </Label>
               <Input
+                data-cy="last-name-input"
                 id="last-name"
                 type="text"
                 placeholder="Doe"
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-sm text-red-700">
+                <p className="text-sm text-red-700" data-cy="last-name-error">
                   {errors.lastName.message}
                 </p>
               )}
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" data-cy="email-label">
+              Email
+            </Label>
             <Input
               id="email"
+              data-cy="email-input"
               type="email"
               placeholder="m@example.com"
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-sm text-red-700">{errors.email.message}</p>
+              <p className="text-sm text-red-700" data-cy="email-error">
+                {errors.email.message}
+              </p>
             )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password")} />
+            <Label htmlFor="password" data-cy="password-label">
+              Password
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              {...register("password")}
+              data-cy="password-input"
+            />
             {errors.password && (
-              <p className="text-sm text-red-700">{errors.password.message}</p>
+              <p className="text-sm text-red-700" data-cy="password-error">
+                {errors.password.message}
+              </p>
             )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="repeatPassword">Repeat Password</Label>
+            <Label htmlFor="repeatPassword" data-cy="repeat-password-label">
+              Repeat Password
+            </Label>
             <Input
               id="repeatPassword"
+              data-cy="repeat-password-input"
               type="password"
               {...register("repeatPassword")}
             />
             {errors.repeatPassword && (
-              <p className="text-sm text-red-700">
+              <p
+                data-cy="repeat-password-error"
+                className="text-sm text-red-700"
+              >
                 {errors.repeatPassword.message}
               </p>
             )}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="profile-image">Profile Photo</Label>
+            <Label htmlFor="profile-image" data-cy="profile-avatar-label">
+              Profile Image
+            </Label>
             <Input
+              data-cy="profile-avatar-input"
               id="profile-image"
               type="file"
               accept="image/*"
@@ -162,25 +199,42 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="bio">Bio</Label>
+            <Label htmlFor="bio" data-cy="bio-label">
+              Bio
+            </Label>
             <Textarea
               id="bio"
+              data-cy="bio-input"
               placeholder="Write something about yourself"
               className="min-h-40"
               {...register("bio")}
             />
             {errors.bio && (
-              <p className="text-sm text-red-700">{errors.bio.message}</p>
+              <p className="text-sm text-red-700" data-cy="bio-error">
+                {errors.bio.message}
+              </p>
             )}
           </div>
-          <Button type="submit" className="w-full dark:bg-accentColor">
+          <Button
+            type="submit"
+            className="w-full dark:bg-accentColor"
+            data-cy="submit-edit-btn"
+          >
             Submit
           </Button>
-          {message && <p className="text-sm text-red-700">{message}</p>}
+          {message && (
+            <p className="text-sm text-red-700" data-cy="returned-message">
+              {message}
+            </p>
+          )}
         </form>
-        <div className="mt-4 text-center text-sm">
+        <div className="mt-4 text-center text-sm" data-cy="return-to-profile">
           Change of Plans? Return to your
-          <Link href={`/profile/${parsedUser.id}`} className="underline ms-1">
+          <Link
+            href={`/profile/${parsedUser.id}`}
+            className="underline ms-1"
+            data-cy="return-to-profile-btn"
+          >
             Profile
           </Link>
         </div>

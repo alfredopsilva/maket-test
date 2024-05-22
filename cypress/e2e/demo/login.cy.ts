@@ -110,11 +110,13 @@ describe("Login Page - When email is not typed.", () => {
     cy.visit("http://localhost:3000/login");
     cy.get("[data-cy=submit-login-btn]").click();
     cy.get("[data-cy=email-input]").then(($input) => {
-      const validationMessage = $input[0].validationMessage;
+      const validationMessage = ($input[0] as HTMLInputElement)
+        .validationMessage;
       expect(validationMessage).to.eq("Please fill out this field.");
     });
     cy.get("[data-cy=password-input]").then(($input) => {
-      const validationMessage = $input[0].validationMessage;
+      const validationMessage = ($input[0] as HTMLInputElement)
+        .validationMessage;
       expect(validationMessage).to.eq("Please fill out this field.");
     });
   });
@@ -126,7 +128,8 @@ describe("Login Page - When password is not typed.", () => {
     cy.get("[data-cy=email-input]").type("admin@admin.ai");
     cy.get("[data-cy=submit-login-btn]").click();
     cy.get("[data-cy=password-input]").then(($input) => {
-      const validationMessage = $input[0].validationMessage;
+      const validationMessage = ($input[0] as HTMLInputElement)
+        .validationMessage;
       expect(validationMessage).to.eq("Please fill out this field.");
     });
   });
@@ -139,4 +142,3 @@ describe("Login Page - Redirects to SignUp Page", () => {
     cy.url().should("include", "/signup");
   });
 });
-

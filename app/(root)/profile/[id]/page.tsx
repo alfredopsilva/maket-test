@@ -11,8 +11,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
   return (
     <section className="flex flex-col items-center gap-5 max-w-lg">
       <div className="">
-        <Avatar className="w-24 h-24">
+        <Avatar data-cy="avatar-container" className="w-24 h-24">
           <AvatarImage
+            data-cy="user-avatar"
             src={user?.profileImage ? user.profileImage : "/images/admin.webp"}
           />
           <AvatarFallback>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
@@ -20,8 +21,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
       </div>
       <div>
         <div className="flex gap-3 items-center">
-          <h3 className="text-3xl dark:text-accentColor">{`${user?.firstName} ${user?.lastName}`}</h3>
-          <Link href={`/profile/edit/${user.id}`}>
+          <h3
+            className="text-3xl dark:text-accentColor"
+            data-cy="user-name"
+          >{`${user?.firstName} ${user?.lastName}`}</h3>
+          <Link href={`/profile/edit/${user.id}`} data-cy="edit-profile-btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               id="Outline"
@@ -35,12 +39,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
             </svg>
           </Link>
         </div>
-        <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+        <p
+          className="text-sm text-center text-gray-500 dark:text-gray-400"
+          data-cy="user-role"
+        >
           {user?.isAdmin ? "Admin" : "User"}
         </p>
       </div>
       <div className="">
-        <p className="text-justify text-sm text-slate-600">
+        <p className="text-justify text-sm text-slate-600" data-cy="user-bio">
           {user?.bio ? user?.bio : "Update your bio!"}
         </p>
       </div>

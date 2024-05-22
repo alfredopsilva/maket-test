@@ -68,7 +68,11 @@ const NavBar = () => {
         </DropdownMenuContent>
       </DropdownMenu>
       {isLoggedIn && (
-        <Button variant={"destructive"} onClick={handleLogout}>
+        <Button
+          data-cy="logout-btn"
+          variant={"destructive"}
+          onClick={handleLogout}
+        >
           Logout
         </Button>
       )}
