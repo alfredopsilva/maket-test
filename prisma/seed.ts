@@ -11,8 +11,8 @@ async function main() {
     update: {},
     create: {
       email: "admin@admin.ai",
-      firstName: "Admin",
-      lastName: "Admin",
+      firstName: "Alfredo",
+      lastName: "Silva",
       password: hashedPassword,
       bio: "An experienced System Administrator with over 8 years in IT infrastructure management. Known for a meticulous approach and proactive problem-solving, excels in network architecture, server management, and cybersecurity.",
       isAdmin: true,
