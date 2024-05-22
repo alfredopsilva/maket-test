@@ -67,6 +67,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
       );
       setTimeout(() => {
         // NOTE: Try to find a better way to redirect.
+        // BUG: Is removing isLogedIn context.
         window.location.href = response.redirectUrl as string;
       }, 3000);
     } else if (response.message) {

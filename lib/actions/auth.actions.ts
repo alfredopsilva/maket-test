@@ -12,10 +12,10 @@ export async function login(loginData: LoginParams): Promise<LoginResponse> {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    console.log("user not found");
+    console.log("User not found");
     return {
       errors: {
-        email: ["User not found"],
+        email: ["Please check your email and password"],
       },
     };
   }
@@ -26,7 +26,7 @@ export async function login(loginData: LoginParams): Promise<LoginResponse> {
     console.log("Invalid password");
     return {
       errors: {
-        password: ["Invalid password"],
+        password: ["Please check your email and password"],
       },
     };
   } else {

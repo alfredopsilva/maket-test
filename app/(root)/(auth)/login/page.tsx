@@ -68,32 +68,46 @@ export function LoginForm() {
     <section className="">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
+          <CardTitle data-cy="card-title" className="text-2xl">
+            Login
+          </CardTitle>
+          <CardDescription data-cy="card-description">
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="grid gap-4"
+            data-cy="login-form"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" data-cy="email-label">
+                Email
+              </Label>
               <Input
                 {...register("email")}
                 id="email"
+                data-cy="email-input"
                 type="email"
                 placeholder="m@example.com"
                 required
               />
             </div>
             {errors.email && (
-              <p className="text-sm text-red-700">{errors.email.message}</p>
+              <p data-cy="email-error" className="text-sm text-red-700">
+                {errors.email.message}
+              </p>
             )}
             <div className="grid gap-2">
               <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" data-cy="password-label">
+                  Password
+                </Label>
                 <Link
                   href="#"
                   className="ml-auto inline-block text-sm underline"
+                  data-cy="forgot-password-link"
                 >
                   Forgot your password?
                 </Link>
@@ -101,20 +115,27 @@ export function LoginForm() {
               <Input
                 id="password"
                 {...register("password")}
+                data-cy="password-input"
                 type="password"
                 required
               />
             </div>
             {errors.password && (
-              <p className="text-sm text-red-700">{errors.password.message}</p>
+              <p data-cy="password-error" className="text-sm text-red-700">
+                {errors.password.message}
+              </p>
             )}
-            <Button type="submit" className="w-full dark:bg-accentColor">
+            <Button
+              data-cy="submit-login-btn"
+              type="submit"
+              className="w-full dark:bg-accentColor"
+            >
               Login
             </Button>
           </form>
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-sm" data-cy="create-account">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline">
+            <Link href="/signup" className="underline" data-cy="sign-up-link">
               Sign up
             </Link>
           </div>

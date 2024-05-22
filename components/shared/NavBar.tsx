@@ -28,11 +28,15 @@ const NavBar = () => {
   };
 
   return (
-    <header className="w-screen flex justify-end p-4 gap-4 ">
+    <header
+      className="w-screen flex justify-end p-4 gap-4"
+      data-cy="navbar-header"
+    >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           {/* NOTE: After the button is clicked, check from where another bother / outiline is comming from. */}
           <Button
+            data-cy="theme-switch"
             variant="outline"
             size="icon"
             className="border dark:border-accentColor"
@@ -46,10 +50,16 @@ const NavBar = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => handleTheme("light")}>
+          <DropdownMenuItem
+            onClick={() => handleTheme("light")}
+            data-cy="light-mode"
+          >
             Light
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleTheme("dark")}>
+          <DropdownMenuItem
+            onClick={() => handleTheme("dark")}
+            data-cy="dark-mode"
+          >
             Dark
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleTheme("system")}>
