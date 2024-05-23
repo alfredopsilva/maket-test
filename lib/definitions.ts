@@ -5,6 +5,18 @@ export const LoginFormSchema = z.object({
   password: z.string().min(4),
 });
 
+export const SignUpSchema = z.object({
+  firstName: z
+    .string()
+    .min(3, { message: "First Name must be at least 3 characters" }),
+  lastName: z
+    .string()
+    .min(3, { message: "Last Name must be at least 3 characters" }),
+  email: z.string().email({ message: "Please enter a valid email" }),
+  password: z.string().min(4),
+  repeatPassword: z.string().min(4),
+});
+
 export const EditProfileSchema = z.object({
   firstName: z
     .string()

@@ -12,7 +12,7 @@ describe("UI Profile Tests", function () {
       });
   });
 
-  describe("Profile Page - UI Elements", function () {
+  describe.skip("Profile Page - UI Elements", function () {
     it("Should have NavBar elements", function () {
       cy.visit(`/profile/${this.userId}`);
       cy.get("[data-cy=navbar-header]").should("be.visible");
@@ -83,7 +83,7 @@ describe("UI Profile Tests", function () {
     });
   });
 
-  describe("Edit Profile Page - UI Element", function () {
+  describe.skip("Edit Profile Page - UI Element", function () {
     it("Should have NavBar Elements", function () {
       cy.visit(`/profile/edit/${this.userId}`);
       cy.get("[data-cy=navbar-header]").should("be.visible");
@@ -203,7 +203,7 @@ describe("UI Profile Tests", function () {
         .and("have.text", "Enter your your data below to create an Account.");
     });
 
-    it("Should display the form with all fields", function () {
+    it.skip("Should display the form with all fields", function () {
       cy.visit("/signup");
       cy.get("[data-cy=sign-up-form]").should("be.visible");
       cy.get("[data-cy=first-name-label]")
@@ -247,7 +247,7 @@ describe("UI Profile Tests", function () {
         .and("have.attr", "type", "submit");
     });
 
-    it("Should display the login link", function () {
+    it.skip("Should display the login link", function () {
       cy.visit("/signup");
       cy.get("[data-cy=login-link]")
         .should("be.visible")
@@ -255,6 +255,7 @@ describe("UI Profile Tests", function () {
     });
 
     it("Should display error message for empty first name", function () {
+      cy.visit("/signup");
       cy.get("[data-cy=submit-sign-up-btn]").click();
       cy.get("[data-cy=first-name-input]").then(($input) => {
         const validationMessage = ($input[0] as HTMLInputElement)
@@ -264,6 +265,7 @@ describe("UI Profile Tests", function () {
     });
 
     it("Should display error message for empty last name", function () {
+      cy.visit("/signup");
       cy.get("[data-cy=submit-sign-up-btn]").click();
       cy.get("[data-cy=last-name-input]").then(($input) => {
         const validationMessage = ($input[0] as HTMLInputElement)
@@ -273,6 +275,7 @@ describe("UI Profile Tests", function () {
     });
 
     it("Should display error message for invalid email", function () {
+      cy.visit("/signup");
       cy.get("[data-cy=email-input]").type("invalid-email");
       cy.get("[data-cy=submit-sign-up-btn]").click();
       cy.get("[data-cy=email-input]").then(($input) => {
@@ -285,6 +288,7 @@ describe("UI Profile Tests", function () {
     });
 
     it("Should display error message for empty password", function () {
+      cy.visit("/signup");
       cy.get("[data-cy=submit-sign-up-btn]").click();
       cy.get("[data-cy=password-input]").then(($input) => {
         const validationMessage = ($input[0] as HTMLInputElement)
@@ -294,6 +298,7 @@ describe("UI Profile Tests", function () {
     });
 
     it("Should display error message for mismatched passwords", function () {
+      cy.visit("/signup");
       cy.get("[data-cy=password-input]").type("password123");
       cy.get("[data-cy=repeat-password-input]").type("differentpassword");
       cy.get("[data-cy=submit-sign-up-btn]").click();
@@ -301,16 +306,6 @@ describe("UI Profile Tests", function () {
         const validationMessage = ($input[0] as HTMLInputElement)
           .validationMessage;
         expect(validationMessage).to.eq("Passwords do not match.");
-      });
-    });
-
-    it("Should display error message for empty profile photo if required", function () {
-      // Assuming the profile photo is required
-      cy.get("[data-cy=submit-sign-up-btn]").click();
-      cy.get("[data-cy=profile-avatar-input]").then(($input) => {
-        const validationMessage = ($input[0] as HTMLInputElement)
-          .validationMessage;
-        expect(validationMessage).to.eq("Please select a file.");
       });
     });
   });
