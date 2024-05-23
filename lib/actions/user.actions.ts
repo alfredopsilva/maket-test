@@ -111,6 +111,9 @@ export async function createUser(fields: {
             return { message: 'Passwords do not match' };
         }
 
+        if (fields.password.length < 4) {
+            return { message: 'Password must be at least 4 characters' };
+        }
         // Hash password if provided
         const hashedPassword = await bcrypt.hash('admin', 10);
 

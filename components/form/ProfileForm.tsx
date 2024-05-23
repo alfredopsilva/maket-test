@@ -76,7 +76,7 @@ const ProfileForm = ({ user }: EditProfileFormProps) => {
     return (
         <form
             className="grid gap-4"
-            data-cy="edit-form"
+            data-cy="profile-form"
             onSubmit={handleSubmit(onSubmit)}
         >
             <div className="grid gap-4 grid-cols-2">
@@ -216,15 +216,12 @@ const ProfileForm = ({ user }: EditProfileFormProps) => {
             <Button
                 type="submit"
                 className="w-full dark:bg-accentColor"
-                data-cy="submit-edit-btn"
+                data-cy="submit-btn"
             >
                 {parsedUser ? 'Edit' : 'Create'}
             </Button>
             {message && (
-                <p
-                    className="text-sm text-green-700"
-                    data-cy="returned-message"
-                >
+                <p className="text-sm text-center" data-cy="returned-message">
                     {message}
                 </p>
             )}

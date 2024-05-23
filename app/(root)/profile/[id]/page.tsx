@@ -15,13 +15,14 @@ const Page = async ({ params }: { params: { id: string } }) => {
                 <Avatar data-cy="avatar-container" className="w-24 h-24">
                     <AvatarImage
                         data-cy="user-avatar"
+                        alt="User Profile Avatar"
                         src={
                             user?.profileImage
                                 ? user.profileImage
                                 : '/images/admin.webp'
                         }
                     />
-                    <AvatarFallback>{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
+                    <AvatarFallback data-cy="avatar-fallback">{`${user?.firstName[0]}${user?.lastName[0]}`}</AvatarFallback>
                 </Avatar>
             </div>
             <div>
@@ -33,6 +34,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     <Link
                         href={`/profile/edit/${user.id}`}
                         data-cy="edit-profile-btn"
+                        aria-label="Edit Profile"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
