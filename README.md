@@ -25,7 +25,7 @@ By default this should be enough to create DB and seed. If the migration procces
 ```bash
 npx prisma db seed
 ```
-
+This user will be created by default.
 ```JSON
 "email": "admin@admin.ai",
   "firstName": "Alfredo",
