@@ -111,11 +111,13 @@ export async function createUser(fields: {
             return { message: 'Passwords do not match' };
         }
 
+        console.log(fields);
+
         if (fields.password.length < 4) {
             return { message: 'Password must be at least 4 characters' };
         }
         // Hash password if provided
-        const hashedPassword = await bcrypt.hash('admin', 10);
+        const hashedPassword = await bcrypt.hash(fields.password, 10);
 
         // Prepare data to create
         const createData: Prisma.UserCreateInput = {
@@ -143,38 +145,3 @@ export async function createUser(fields: {
         await db.$disconnect();
     }
 }
-
-const handleProfileImage = async (
-    parsedImage: any,
-    firstName: string,
-    lastName: string
-): Promise<string> => {
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-
-    if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    const newFileName = `${Date.now()}_${firstName}_${lastName}`;
-    const filePath = path.join(uploadDir, newFileName);
-
-    // Decode base64 string
-    let buffer;
-    if (
-        typeof parsedImage === 'string' &&
-        parsedImage.startsWith('data:image')
-    ) {
-        // Remove base64 URL prefix if present
-        const base64String = parsedImage.split(',')[1];
-        buffer = Buffer.from(base64String, 'base64');
-    } else if (parsedImage instanceof Buffer) {
-        // If parsedImage is already a Buffer
-        buffer = parsedImage;
-    } else {
-        throw new Error('Invalid image format');
-    }
-
-    fs.writeFileSync(filePath, buffer);
-
-    return `/uploads/${newFileName}`;
-};

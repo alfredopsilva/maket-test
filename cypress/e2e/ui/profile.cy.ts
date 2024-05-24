@@ -31,7 +31,10 @@ describe('UI Profile Tests', function () {
             cy.get('[data-cy=user-role]')
                 .should('be.visible')
                 .and('not.be.empty');
-            cy.get('[data-cy=user-bio]').should('exist').and('not.be.empty');
+            cy.get('[data-cy=user-bio]')
+                .should('exist')
+                .and('not.be.empty')
+                .and('have.css', 'font-size', '14px');
         });
 
         it('Should have the correct image attributes', function () {
@@ -42,7 +45,12 @@ describe('UI Profile Tests', function () {
             cy.get('[data-cy=avatar-container]')
                 .should('exist')
                 .and('have.class', 'rounded-full')
-                .and('have.class', 'overflow-hidden');
+                .and('have.class', 'overflow-hidden')
+                .then($el => {
+                    expect($el.width()).to.be.closeTo(96, 1);
+                    expect($el.height()).to.be.closeTo(96, 1);
+                    expect($el.css('border-radius')).to.equal('9999px');
+                });
         });
 
         it('Should have correct accessibility attributes', function () {
@@ -85,6 +93,14 @@ describe('Test Logout - UI elements', function () {
         cy.visit(`/profile/${this.userId}`);
         cy.get('[data-cy=logout-btn]')
             .should('be.visible')
-            .and('have.text', 'Logout');
+            .and('have.text', 'Logout')
+            .then($el => {
+                expect($el.width()).to.be.closeTo(46.94, 1); // Expected width
+                expect($el.height()).to.be.closeTo(20, 1); // Expected height
+                expect($el.css('padding-top')).to.equal('8px');
+                expect($el.css('padding-right')).to.equal('16px');
+                expect($el.css('padding-bottom')).to.equal('8px');
+                expect($el.css('padding-left')).to.equal('16px');
+            });
     });
 });
