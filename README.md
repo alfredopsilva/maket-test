@@ -54,8 +54,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ```
 
 - After this command, a browser window will pop up and you should select `E2E Testing`.
-![Cypress E2E Testing](https://i.ibb.co/C9WMLhC/E2E-Testing.png)
+![Cypress E2E Testing](https://imgur.com/a/8MWCwZu)
   
 - Here our server should be running properly. If it isn't running, try using `npm run dev` to start it.
 - Select Chrome and the dashboard will be initialized.
-![Cypress Dashboard](https://i.ibb.co/RDRwdX7/Cypress-Dashboard.png)
+![Cypress Dashboard](https://imgur.com/a/aTB291Y)
