@@ -27,7 +27,7 @@ npx prisma db seed
 ```
 This user will be created by default.
 ```JSON
-"email": "admin@admin.ai",
+  "email": "admin@admin.ai",
   "firstName": "Alfredo",
   "lastName": "Silva",
   "password": "admin",
