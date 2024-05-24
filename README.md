@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Maket Home Assesment 
 
-## Getting Started
+Objective:
+Develop a simple web application with a login page and a profile page. Implement end-to-end (E2E) tests to ensure the functionality of the application, and to ensure the styling of the pages as expected (does the page render as it is expected by the UI). 
 
-First, run the development server:
-
+## Steps 
+- Clone this repo
+- Install all dependencies
+  
 ```bash
-npm run dev
+npm i
 # or
-yarn dev
+yarn i
 # or
-pnpm dev
+pnpm i
 # or
-bun dev
+bun i
+```
+- Initialize DB with
+```bash
+npx prisma migrate dev
 ```
 
+By default this should be enough to create DB and seed. If the migration proccess does not complete the seeding, use
+```bash
+npx prisma db seed
+```
+
+```JSON
+"email": "admin@admin.ai",
+  "firstName": "Alfredo",
+  "lastName": "Silva",
+  "password": "admin",
+  "bio": "An experienced System Administrator with over 8 years in IT infrastructure management. Known for a meticulous approach and proactive problem-solving, excels in network architecture, server management, and cybersecurity.",
+  "isAdmin": true,
+  "profileImage": "/images/admin.webp"
+```
+
+- To run this server
+```bash
+npm run dev
+```
+
+By default this project should run on http://localhost:3000. 
+
+If the project starts running in another port, try changing the port to 3000 or change cypress config file to be the same base url that is running.
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cypress
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- To initialize cypress testings type
+```bash
+  npx cypress open
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- After this command, a browser window will pop up and you should select `E2E Testing`.
+![Cypress E2E Testing](https://ibb.co/C9WMLhC)
+  
+- Here our server should be running properly. If it isn't running, try using `npm run dev` to start it.
+- Select Chrome and the dashboard will be initialized.
+![Cypress Dashboard](https://ibb.co/RDRwdX7)
