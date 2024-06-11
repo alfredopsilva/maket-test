@@ -72,7 +72,7 @@ const Login = () => {
             <Card className="mx-auto max-w-sm" data-cy="login-container">
                 <CardHeader>
                     <CardTitle data-cy="card-title" className="text-2xl">
-                        Login
+                        This is another Login Page
                     </CardTitle>
                     <CardDescription data-cy="card-description">
                         Enter your email below to login to your account
