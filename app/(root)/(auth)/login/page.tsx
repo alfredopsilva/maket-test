@@ -29,7 +29,7 @@ function isSuccessResponse(
     return (response as SuccessResponse).redirectUrl !== undefined;
 }
 
-export function LoginForm() {
+const Login = () => {
     const router = useRouter();
     const { setIsLoggedIn } = useAuth();
 
@@ -165,6 +165,6 @@ export function LoginForm() {
             </Card>
         </section>
     );
-}
+};
 
-export default LoginForm;
+export default Login;
