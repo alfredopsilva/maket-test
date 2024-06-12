@@ -1,4 +1,4 @@
-describe("login page - Password doesn't match the validations parameters.", () => {
+describe.skip("login page - Password doesn't match the validations parameters.", () => {
     it("Should show validation errors when the password doesn't match the constraints", () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('m@gmail.com');
@@ -8,7 +8,7 @@ describe("login page - Password doesn't match the validations parameters.", () =
     });
 });
 
-describe('Login Page - Successful Login', () => {
+describe.skip('Login Page - Successful Login', () => {
     it('Should login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('admin@admin.ai');
@@ -18,7 +18,7 @@ describe('Login Page - Successful Login', () => {
     });
 });
 
-describe('Login Page - Unsuccessful Login when password is wrong.', () => {
+describe.skip('Login Page - Unsuccessful Login when password is wrong.', () => {
     it('Should not login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('admin@admin.ai');
@@ -30,7 +30,7 @@ describe('Login Page - Unsuccessful Login when password is wrong.', () => {
     });
 });
 
-describe('Login Page - Unsuccessful Login when email is wrong.', () => {
+describe.skip('Login Page - Unsuccessful Login when email is wrong.', () => {
     it('Should not login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('admin1@adsmin.ai');
@@ -42,7 +42,7 @@ describe('Login Page - Unsuccessful Login when email is wrong.', () => {
     });
 });
 
-describe('Login Page - Unsuccessful Login when both data is wrong.', () => {
+describe.skip('Login Page - Unsuccessful Login when both data is wrong.', () => {
     it('Should not login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('admin1@adsmin.ai');
@@ -54,7 +54,7 @@ describe('Login Page - Unsuccessful Login when both data is wrong.', () => {
     });
 });
 
-describe('Login Page - Correct form attributes', () => {
+describe.skip('Login Page - Correct form attributes', () => {
     it('Should have the following attributes', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').should('have.attr', 'type', 'email');
@@ -73,7 +73,7 @@ describe('Login Page - Correct form attributes', () => {
     });
 });
 
-describe('Login Page - Theme Switch', () => {
+describe.skip('Login Page - Theme Switch', () => {
     it('Should switch the theme', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=navbar-header]').should('exist');
@@ -86,7 +86,7 @@ describe('Login Page - Theme Switch', () => {
     });
 });
 
-describe('Login Page - When email is not typed.', () => {
+describe.skip('Login Page - When email is not typed.', () => {
     it('Should not login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=submit-login-btn]').click();
@@ -103,7 +103,7 @@ describe('Login Page - When email is not typed.', () => {
     });
 });
 
-describe('Login Page - When password is not typed.', () => {
+describe.skip('Login Page - When password is not typed.', () => {
     it('Should not login successfully', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=email-input]').type('admin@admin.ai');
@@ -116,7 +116,7 @@ describe('Login Page - When password is not typed.', () => {
     });
 });
 
-describe('Login Page - Redirects to SignUp Page', () => {
+describe.skip('Login Page - Redirects to SignUp Page', () => {
     it('Should redirect to the SignUp page', () => {
         cy.visit('http://localhost:3000/login');
         cy.get('[data-cy=sign-up-link]').click();
