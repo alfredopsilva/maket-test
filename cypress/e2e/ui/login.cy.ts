@@ -10,7 +10,7 @@ describe('Login Page - Have correct Elements', () => {
             .and('have.class', 'border');
         cy.get('[data-cy=card-title]')
             .should('exist')
-            .and('have.text', 'This is another Login Page');
+            .and('have.text', 'Login Page');
         cy.get('[data-cy=card-description]')
             .should('exist')
             .and('have.text', 'Enter your email below to login to your account')
