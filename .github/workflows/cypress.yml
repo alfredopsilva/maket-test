@@ -50,6 +50,7 @@ jobs:
               with:
                   node-version: '18'
 
+            #Changing NODE enviroment.
             - name: Install dependencies
               run: npm ci
 
