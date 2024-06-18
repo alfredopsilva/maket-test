@@ -56,9 +56,6 @@ jobs:
           name: build-artifacts
           path: .next
   
-      - name: Start Local Server
-        run: npm start
-  
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
