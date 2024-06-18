@@ -33,6 +33,9 @@ jobs:
               run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
               id: deployment
 
+            - name: Echo Vercel Inspect Output
+              run: vercel inspect --token=${{ secrets.VERCEL_TOKEN }}
+
             - name: Get Deployment URL
               run: echo "DEPLOYMENT_URL=$(vercel inspect --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> .env
 
