@@ -11,38 +11,23 @@ on:
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
-
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+  
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
-
+  
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
+  
       - name: Install Dependencies
         run: npm ci
-
+  
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Project Artifacts to Vercel
-        id: vercel_deploy
-        run: |
-          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm)
-          echo "DEPLOYMENT_URL=$DEPLOY_URL" >> $GITHUB_ENV
-
-      - name: Validate Deployment URL
-        run: |
-          if [ -z "${{ env.DEPLOYMENT_URL }}" ]; then
-            echo "Deployment URL is empty. Deployment might have failed."
-            exit 1
-          else
-            echo "Deployment URL is valid: ${{ env.DEPLOYMENT_URL }}"
-          fi
-
+            
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -52,35 +37,35 @@ jobs:
   E2E-Tests:
     needs: Deploy-Preview
     runs-on: ubuntu-latest
-
+  
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Setup Node.js
+  
+      - name: Setup Node.JS
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
-
+          node-version: ${{ env.NODE_VERSION }}
+     
       - name: Install Dependencies
         run: npm ci
-
+      
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
         with:
           name: build-artifacts
           path: .next
-
-      - name: Run Cypress Tests
+  
+      - name: Start Local Server
+        run: npm start
+  
+      - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
           start: npm start
           wait-on: http://localhost:3000
+          wait-on-timeout: 120
+          parallel: true
         env:
-          CYPRESS_BASE_URL: http://localhost:3000
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Debug Deployment URL
-        run: |
-          echo "Debugging Deployment URL..."
-          echo "DEPLOYMENT_URL=${{ env.DEPLOYMENT_URL }}"
+          NODE_VERSION: ${{ env.NODE_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
