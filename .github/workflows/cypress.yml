@@ -34,9 +34,6 @@ jobs:
           DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm)
           echo "DEPLOYMENT_URL=$DEPLOY_URL" >> $GITHUB_ENV
 
-      - name: Echo Deployment URL
-        run: echo "Deployment URL: ${{ env.DEPLOYMENT_URL }}"
-
       - name: Validate Deployment URL
         run: |
           if [ -z "${{ env.DEPLOYMENT_URL }}" ]; then
