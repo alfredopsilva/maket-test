@@ -77,3 +77,4 @@ E2E-Tests:
               NODE_VERSION: ${{ env.NODE_VERSION }}
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               CYPRESS_BASE_URL: ${{ env.DEPLOYMENT_URL }}
+        #Final
