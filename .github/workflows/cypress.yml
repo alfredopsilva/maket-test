@@ -1,89 +1,68 @@
 name: E2E Testing
 
-# Define global environment variables for this workflow.
 env:
-    NODE_VERSION: 18.x
-    VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-    VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  NODE_VERSION: 18.x
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
-    # Set up to execute on every branch's Pull Request.
-    pull_request:
-        branches:
-            - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-    Deploy-Preview:
-        runs-on: ubuntu-latest
+  Deploy-Preview:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-            - name: Install Vercel CLI
-              run: npm install --global vercel@latest
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-            - name: Pull Vercel Environment Information
-              run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
-            - name: Build Project Artifacts
-              run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Locally
+        run: npm run build
 
-            - name: Deploy Project Artifacts to Vercel
-              run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-              id: deployment
+      - name: Start Local Server
+        run: npm start &
+        id: start_server
 
-            - name: Get Deployment URL
-              id: get-deployment-url
-              run: echo "DEPLOYMENT_URL=$(vercel inspect $(vercel deployments --token=${{ secrets.VERCEL_TOKEN }} --limit=1 --json | jq -r '.[0].url') --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> .env
+      - name: Wait for Server to be Ready
+        run: npx wait-on http://localhost:3000
 
-            - name: Debug .env File
-              run: cat .env # This step is for debugging to ensure .env file is created correctly
+      # Set Deployment URL step to define the environment variable (optional if you still need it for other purposes)
+      - name: Set Deployment URL
+        run: echo "DEPLOYMENT_URL=http://localhost:3000" >> $GITHUB_ENV
 
-            - name: Verify .env File Exists
-              run: ls -la .env # This step checks if the .env file exists and lists its details
+  E2E-Tests:
+    needs: Deploy-Preview
+    runs-on: ubuntu-latest
 
-            - name: Save Deployment URL
-              uses: actions/upload-artifact@v2
-              with:
-                  name: deployment-url
-                  path: .env
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    E2E-Tests:
-        needs: Deploy-Preview
-        runs-on: ubuntu-latest
+      - name: Setup Node.JS
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm ci
 
-            - name: Download Deployment URL
-              uses: actions/download-artifact@v2
-              with:
-                  name: deployment-url
-                  path: .
+      - name: Wait for Local Server to be Ready
+        run: npx wait-on http://localhost:3000
 
-            - name: Source the Deployment URL
-              run: source .env
-
-            - name: Setup Node.JS
-              uses: actions/setup-node@v2
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-
-            - name: Install Dependencies
-              run: npm ci
-
-            - name: Wait for Deployment URL
-              run: npx wait-on http://${{ env.DEPLOYMENT_URL }}
-
-            - name: Cypress run
-              uses: cypress-io/github-action@v2
-              with:
-                  start: npm start
-                  wait-on: http://${{ env.DEPLOYMENT_URL }}
-                  parallel: true
-              env:
-                  NODE_VERSION: ${{ env.NODE_VERSION }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  CYPRESS_BASE_URL: http://${{ env.DEPLOYMENT_URL }}
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          wait-on: http://localhost:3000
+          parallel: true
+        env:
+          NODE_VERSION: ${{ env.NODE_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
