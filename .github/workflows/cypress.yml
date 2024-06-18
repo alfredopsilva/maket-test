@@ -33,11 +33,9 @@ jobs:
               run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
               id: deployment
 
-            - name: Echo Vercel Inspect Output
-              run: vercel inspect --token=${{ secrets.VERCEL_TOKEN }}
-
             - name: Get Deployment URL
-              run: echo "DEPLOYMENT_URL=$(vercel inspect --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> .env
+              id: get-deployment-url
+              run: echo "DEPLOYMENT_URL=$(vercel inspect $(vercel deployments --token=${{ secrets.VERCEL_TOKEN }} --limit=1 --json | jq -r '.[0].url') --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> .env
 
             - name: Debug .env File
               run: cat .env # This step is for debugging to ensure .env file is created correctly
