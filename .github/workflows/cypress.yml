@@ -34,8 +34,8 @@ jobs:
           DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --confirm)
           echo "DEPLOYMENT_URL=$DEPLOY_URL" >> $GITHUB_ENV
 
-      - name: Debug Deployment URL
-        run: echo "DEPLOYMENT_URL=${{ env.DEPLOYMENT_URL }}"
+      - name: Echo Deployment URL
+        run: echo "Deployment URL: ${{ env.DEPLOYMENT_URL }}"
 
       - name: Validate Deployment URL
         run: |
@@ -45,6 +45,12 @@ jobs:
           else
             echo "Deployment URL is valid: ${{ env.DEPLOYMENT_URL }}"
           fi
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: .next
 
   E2E-Tests:
     needs: Deploy-Preview
@@ -62,13 +68,27 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: .next
+
+      - name: Start Local Server
+        run: npm start
+
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v2
         with:
           start: npm start
-          wait-on: ${{ env.DEPLOYMENT_URL }}
+          wait-on: http://localhost:3000
           wait-on-timeout: 120
           config-file: cypress.json
         env:
-          CYPRESS_BASE_URL: ${{ env.DEPLOYMENT_URL }}
+          CYPRESS_BASE_URL: http://localhost:3000
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Debug Deployment URL
+        run: |
+          echo "Debugging Deployment URL..."
+          echo "DEPLOYMENT_URL=${{ env.DEPLOYMENT_URL }}"
