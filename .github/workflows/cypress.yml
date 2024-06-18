@@ -71,16 +71,11 @@ jobs:
           name: build-artifacts
           path: .next
 
-      - name: Start Local Server
-        run: npm start
-
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v2
         with:
           start: npm start
           wait-on: http://localhost:3000
-          wait-on-timeout: 120
-          config-file: cypress.json
         env:
           CYPRESS_BASE_URL: http://localhost:3000
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
