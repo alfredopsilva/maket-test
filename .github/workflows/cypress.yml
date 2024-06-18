@@ -34,7 +34,13 @@ jobs:
               id: deployment
 
             - name: Get Deployment URL
-              run: echo "DEPLOYMENT_URL=$(vercel inspect --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> $GITHUB_ENV
+              run: echo "DEPLOYMENT_URL=$(vercel inspect --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> .env
+
+            - name: Debug .env File
+              run: cat .env # This step is for debugging to ensure .env file is created correctly
+
+            - name: Verify .env File Exists
+              run: ls -la .env # This step checks if the .env file exists and lists its details
 
             - name: Save Deployment URL
               uses: actions/upload-artifact@v2
