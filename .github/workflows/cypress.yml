@@ -1,68 +1,11 @@
-name: Vercel Preview Deployment and E2E Testing
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-on:
-  push:
-    branches-ignore:
-      - main
-
+name: ci
+# https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on: [push, deployment, deployment_status]
 jobs:
-  Deploy-Preview:
+  show-event:
     runs-on: ubuntu-latest
-  
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-  
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-  
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-  
-      - name: Install Dependencies
-        run: npm ci
-  
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-            
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: .next
-
-  E2E-Tests:
-    needs: Deploy-Preview
-    runs-on: ubuntu-latest
-  
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-  
-      - name: Setup Node.JS
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-     
-      - name: Install Dependencies
-        run: npm ci
-      
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts
-          path: .next
-  
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          start: npm start
-          wait-on: http://localhost:3000
-          wait-on-timeout: 120
-          parallel: true
+      - name: Dump GitHub context
         env:
-          NODE_VERSION: ${{ env.NODE_VERSION }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
