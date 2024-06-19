@@ -1,79 +1,13 @@
-name: E2E Testing
-
-# Define global environment variables for this workflow.
-env:
-    NODE_VERSION: 18.x
-    VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-    VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-on:
-    # Set up to execute on every branch's Pull Request.
-    pull_request:
-        branches:
-            - '**'
-
+name: ci
+# https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on: [push, deployment, deployment_status]
 jobs:
-    Deploy-Preview:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Install Vercel CLI
-              run: npm install --global vercel@latest
-
-            - name: Pull Vercel Environment Information
-              run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-            - name: Build Project Artifacts
-              run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-            - name: Deploy Project Artifacts to Vercel
-              run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-              id: deployment
-
-            - name: Get Deployment URL
-              run: echo "DEPLOYMENT_URL=$(vercel inspect --token=${{ secrets.VERCEL_TOKEN }} | jq -r '.url')" >> $GITHUB_ENV
-
-            - name: Save Deployment URLq
-              uses: actions/upload-artifact@v2
-              with:
-                  name: deployment-url
-                  path: .env
-
-E2E-Tests:
-    needs: Deploy-Preview
+  e2e:
+    # only runs this job on successful deploy
     runs-on: ubuntu-latest
-
     steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          run: echo "${{ github.event.deployment_status.target_url }}"
 
-        - name: Download Deployment URL
-          uses: actions/download-artifact@v2
-          with:
-              name: deployment-url
-              path: .
-
-        - name: Source the Deployment URL
-          run: source .env
-
-        - name: Setup Node.JS
-          uses: actions/setup-node@v2
-          with:
-              node-version: ${{ env.NODE_VERSION }}
-
-        - name: Install Dependencies
-          run: npm ci
-
-        - name: Cypress run
-          uses: cypress-io/github-action@v2
-          with:
-              start: npm start
-              wait-on: ${{ env.DEPLOYMENT_URL }}
-              parallel: true
-          env:
-              NODE_VERSION: ${{ env.NODE_VERSION }}
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              CYPRESS_BASE_URL: ${{ env.DEPLOYMENT_URL }}
