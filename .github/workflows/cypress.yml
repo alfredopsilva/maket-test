@@ -10,13 +10,26 @@ on:
 jobs:
     githubContext:
         runs-on: ubuntu-latest
+        outputs:
+            branch_name: ${{ steps.get_branch_name.outputs.branch_name }}
         steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
             - name: Dump GitHub context
               env:
                   GITHUB_CONTEXT: ${{ toJson(github) }}
               run: echo "$GITHUB_CONTEXT"
 
+            - name: Dump GitHub ref_name
+              run: echo ${{ github.ref_name }}
+
+            - name: Get branch name
+              id: get_branch_name
+              run: echo "::set-output name=branch_name::${{ github.ref_name }}"
+
     e2e:
+        needs: githubContext
         if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
         runs-on: ubuntu-latest
         steps:
@@ -28,8 +41,8 @@ jobs:
                   GITHUB_CONTEXT: ${{ toJson(github) }}
               run: echo "$GITHUB_CONTEXT"
 
-            - name: Get branch name
-              run: echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+            - name: Set branch name from previous job
+              run: echo "BRANCH_NAME=${{ needs.githubContext.outputs.branch_name }}" >> $GITHUB_ENV
 
             - name: Run Cypress 🌲
               uses: cypress-io/github-action@v2
