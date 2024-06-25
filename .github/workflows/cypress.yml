@@ -1,31 +1,37 @@
-name: Run E2E Tests
+namname: E2E Testing
 
-on:
-    repository_dispatch:
-        types: [start_deployment_check]
-    deployment_status:
-        types: [created, completed]
+env:
+    NODE_VERSION: 18.x
+
+on: [deployment_status]
 
 jobs:
     e2e:
-        runs-on: ubuntu-latest
         if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+            - name: Get Deployment Source Branch Name
+              id: git-branch
+              run: |
+                  git branch -a --contains ${{ github.event.deployment.ref }}
+                  source_branches="$(git branch -a --contains ${{ github.event.deployment.ref }})"
+                  result=$(echo "$source_branches" | tail -n1 | sed 's/^[ \t]*//') 
+                  echo "Remote source of deployment: ${result}"
+                  echo "Local git ref of deployment: ${result#remotes/origin/*}"
+                  echo "SOURCE_REF=${result#remotes/origin/*}" >> "$GITHUB_OUTPUT"
 
-            - name: Display Branch Name from Dispatch Event
-              if: ${{ github.event_name == 'repository_dispatch' }}
-              run: echo ${{ github.event.client_payload.branch_name }}
-
-            - name: Get Branch Name from Dispatch Event
-              if: ${{ github.event_name == 'repository_dispatch' }}
-              id: get_branch_name
-              run: echo "BRANCH_NAME=${{ github.event.client_payload.branch_name }}" >> $GITHUB_ENV
-
-            - name: Set Branch Name from Environment
-              if: ${{ github.event_name == 'deployment_status' }}
-              run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
-
-            - name: Display Branch Name
-              run: echo ${{ env.BRANCH_NAME }}
+            # - name: Run Cypress 🌲
+            #   uses: cypress-io/github-action@v2
+            #   with:
+            #       config-file: cypress.config.ts
+            #       record: true
+            #       timeout-minutes: 5
+            #   env:
+            #       CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
+            #       CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
+            #       CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+            #       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            #       COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
