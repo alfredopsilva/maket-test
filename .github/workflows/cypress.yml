@@ -15,6 +15,7 @@ jobs:
             - name: Get Deployment Source Branch Name
               id: git-branch
               run: |
+                  git fetch --all
                   git branch -a --contains ${{ github.event.deployment.ref }}
                   source_branches="$(git branch -a --contains ${{ github.event.deployment.ref }})"
                   result=$(echo "$source_branches" | tail -n1 | sed 's/^[ \t]*//') 
