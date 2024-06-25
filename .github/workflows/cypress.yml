@@ -23,16 +23,16 @@ jobs:
                   echo "Local git ref of deployment: ${result#remotes/origin/*}"
                   echo "SOURCE_REF=${result#remotes/origin/*}" >> "$GITHUB_OUTPUT"
 
-            # - name: Run Cypress 🌲
-            #   uses: cypress-io/github-action@v2
-            #   with:
-            #       config-file: cypress.config.ts
-            #       record: true
-            #       timeout-minutes: 5
-            #   env:
-            #       CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
-            #       CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
-            #       CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-            #       CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-            #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            #       COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
+            - name: Run Cypress 🌲
+              uses: cypress-io/github-action@v2
+              with:
+                  config-file: cypress.config.ts
+                  record: true
+                  timeout-minutes: 5
+              env:
+                  CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
+                  CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
+                  CYPRESS_BASE_URL: ${{ env.SOURCE_REF }}
+                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
