@@ -1,32 +1,12 @@
-name: Maket Testing
-
-env:
-    NODE_VERSION: 18.x
+name: Run E2E Tests
 
 on:
-    push:
-        branches:
-            - '**'
+    deployment_status:
+        types: [created, completed]
+    repository_dispatch:
+        types: [store_branch_name]
+
 jobs:
-    captureBranchName:
-        runs-on: ubuntu-latest
-        if: ${{ github.event_name == 'push' }}
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-
-            - name: Dump GitHub ref_name
-              run: echo ${{ github.ref_name }}
-
-            - name: Save branch name
-              run: echo ${{ github.ref_name }} > branch_name.txt
-
-            - name: Upload branch name artifact
-              uses: actions/upload-artifact@v2
-              with:
-                  name: branch-name
-                  path: branch_name.txt
-
     e2e:
         runs-on: ubuntu-latest
         if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
@@ -34,24 +14,18 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
-            - name: Download branch name artifact
-              uses: actions/download-artifact@v2
-              with:
-                  name: branch-name
+            - name: Get branch name from payload
+              if: ${{ github.event_name == 'repository_dispatch' }}
+              run: echo "::set-output name=branch_name::${{ github.event.client_payload.branch_name }}"
 
-            - name: Read branch name
-              id: read_branch_name
+            - name: Save branch name to environment
+              if: ${{ github.event_name == 'repository_dispatch' }}
               run: |
-                  BRANCH_NAME=$(cat branch_name.txt)
-                  echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+                  echo "BRANCH_NAME=${{ steps.get_branch_name.outputs.branch_name }}" >> $GITHUB_ENV
 
-            - name: Dump GitHub context
-              env:
-                  GITHUB_CONTEXT: ${{ toJson(github) }}
-              run: echo "$GITHUB_CONTEXT"
-
-            - name: Get BRANCH_NAME
-              run: echo ${{ env.BRANCH_NAME }}
+            - name: Retrieve branch name from environment
+              if: ${{ github.event_name == 'deployment_status' }}
+              run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
 
             - name: Run Cypress 🌲
               uses: cypress-io/github-action@v2
