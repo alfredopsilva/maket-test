@@ -1,28 +1,27 @@
 name: Run E2E Tests
 
 on:
-  repository_dispatch:
-    types: [start_deployment_check]
-  deployment_status:
-    types: [created, completed]
+    repository_dispatch:
+        types: [start_deployment_check]
+    deployment_status:
+        types: [created, completed]
 
 jobs:
-  e2e:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    e2e:
+        runs-on: ubuntu-latest
+        if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-      - name: Get Branch Name from Dispatch Event
-        if: ${{ github.event_name == 'repository_dispatch' }}
-        id: get_branch_name
-        run: echo "branch_name=${{ github.event.client_payload.branch_name }}" >> $GITHUB_ENV
+            - name: Get Branch Name from Dispatch Event
+              if: ${{ github.event_name == 'repository_dispatch' }}
+              id: get_branch_name
+              run: echo "branch_name=${{ github.event.client_payload.branch_name }}" >> $GITHUB_ENV
 
-      - name: Set Branch Name from Environment
-        if: ${{ github.event_name == 'deployment_status' }}
-        run: echo "BRANCH_NAME=${{ env.branch_name }}" >> $GITHUB_ENV
+            - name: Set Branch Name from Environment
+              if: ${{ github.event_name == 'deployment_status' }}
+              run: echo "BRANCH_NAME=${{ env.branch_name }}" >> $GITHUB_ENV
 
-      - name: Display Branch Name
-        run: echo "Branch name: ${{ env.BRANCH_NAME }}"
-
+            - name: Display Branch Name
+              run: echo ${{ env.BRANCH_NAME }}
