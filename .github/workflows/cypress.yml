@@ -28,7 +28,7 @@ jobs:
               run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
 
             - name: Display Branch name
-              run: echo ${{ BRANCH_NAME }}
+              run: echo ${{ env.BRANCH_NAME }}
 
             - name: Run Cypress 🌲
               uses: cypress-io/github-action@v2
