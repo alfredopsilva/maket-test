@@ -11,5 +11,5 @@ jobs:
 
             - name: Get and Echo Branch Name
               run: |
-                  BRANCH_NAME=${GITHUB_REF#refs/heads/}
+                  BRANCH_NAME=$(git name-rev --name-only ${{ github.sha }})
                   echo "Branch name: $BRANCH_NAME"
