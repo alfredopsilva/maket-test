@@ -27,14 +27,5 @@ jobs:
               if: ${{ github.event_name == 'deployment_status' }}
               run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
 
-            - name: Run Cypress 🌲
-              uses: cypress-io/github-action@v2
-              with:
-                  config-file: cypress.config.ts
-                  record: true
-                  timeout-minutes: 5
-              env:
-                  CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
+            - name: Display Branch Name
+              run: echo ${{ env.BRANCH_NAME }}

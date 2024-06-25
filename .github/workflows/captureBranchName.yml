@@ -16,6 +16,9 @@ jobs:
               id: get_branch_name
               run: echo "::set-output name=branch_name::${{ github.head_ref }}"
 
+            - name: Display head_ref
+              run: echo ${{github.head_ref}}
+
             - name: Trigger Repository Dispatch
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
