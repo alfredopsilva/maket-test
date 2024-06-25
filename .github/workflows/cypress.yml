@@ -1,6 +1,10 @@
 name: Echo Branch Name
 
-on: deployment_status
+on:
+    push:
+        branches:
+            - '**'
+
 jobs:
     echoBranchName:
         runs-on: ubuntu-latest
@@ -10,5 +14,5 @@ jobs:
 
             - name: Get and Echo Branch Name
               run: |
-                  BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+                  BRANCH_NAME=${GITHUB_REF#refs/heads/}
                   echo "Branch name: $BRANCH_NAME"
