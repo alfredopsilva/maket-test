@@ -1,43 +1,14 @@
-name: Run E2E Tests
+name: Echo Branch Name
 
-on:
-    deployment_status:
-        types: [created, completed]
-    repository_dispatch:
-        types: [store_branch_name]
-
+on: deployment_status
 jobs:
-    e2e:
+    echoBranchName:
         runs-on: ubuntu-latest
-        if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
         steps:
             - name: Checkout
               uses: actions/checkout@v2
 
-            - name: Get branch name from payload
-              if: ${{ github.event_name == 'repository_dispatch' }}
-              run: echo "::set-output name=branch_name::${{ github.event.client_payload.branch_name }}"
-
-            - name: Save branch name to environment
-              if: ${{ github.event_name == 'repository_dispatch' }}
+            - name: Get and Echo Branch Name
               run: |
-                  echo "BRANCH_NAME=${{ steps.get_branch_name.outputs.branch_name }}" >> $GITHUB_ENV
-
-            - name: Retrieve branch name from environment
-              if: ${{ github.event_name == 'deployment_status' }}
-              run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
-
-            - name: Display Branch name
-              run: echo ${{ env.BRANCH_NAME }}
-
-            - name: Run Cypress 🌲
-              uses: cypress-io/github-action@v2
-              with:
-                  config-file: cypress.config.ts
-                  record: true
-                  timeout-minutes: 5
-              env:
-                  CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
-                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
+                  BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+                  echo "Branch name: $BRANCH_NAME"
