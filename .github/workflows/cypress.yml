@@ -1,9 +1,6 @@
 name: Echo Branch Name
 
-on:
-    push:
-        branches:
-            - '**'
+on: deployment_status
 
 jobs:
     echoBranchName:
