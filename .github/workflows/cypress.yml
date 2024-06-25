@@ -32,7 +32,7 @@ jobs:
               env:
                   CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
                   CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
-                  CYPRESS_BASE_URL: ${{ env.SOURCE_REF }}
+                  CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
                   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  COMMIT_INFO_BRANCH: ${{ env.BRANCH_NAME }}
+                  COMMIT_INFO_BRANCH: ${{ env.SOURCE_REF }}
