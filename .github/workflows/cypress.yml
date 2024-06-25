@@ -44,6 +44,9 @@ jobs:
             - name: Set branch name from previous job
               run: echo "BRANCH_NAME=${{ needs.githubContext.outputs.branch_name }}" >> $GITHUB_ENV
 
+            - name: Get BRANCH_NAME
+              run: echo ${{ env.BRANCH_NAME }}
+
             - name: Run Cypress 🌲
               uses: cypress-io/github-action@v2
               with:
