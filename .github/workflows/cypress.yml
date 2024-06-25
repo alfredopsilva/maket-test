@@ -17,15 +17,11 @@ jobs:
       - name: Get Branch Name from Dispatch Event
         if: ${{ github.event_name == 'repository_dispatch' }}
         id: get_branch_name
-        run: echo "::set-output name=branch_name::${{ github.event.client_payload.branch_name }}"
-
-      - name: Set Branch Name
-        if: ${{ github.event_name == 'repository_dispatch' }}
-        run: echo "BRANCH_NAME=${{ steps.get_branch_name.outputs.branch_name }}" >> $GITHUB_ENV
+        run: echo "branch_name=${{ github.event.client_payload.branch_name }}" >> $GITHUB_ENV
 
       - name: Set Branch Name from Environment
         if: ${{ github.event_name == 'deployment_status' }}
-        run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
+        run: echo "BRANCH_NAME=${{ env.branch_name }}" >> $GITHUB_ENV
 
       - name: Display Branch Name
         run: echo "Branch name: ${{ env.BRANCH_NAME }}"
