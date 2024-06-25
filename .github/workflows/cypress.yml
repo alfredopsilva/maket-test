@@ -4,45 +4,54 @@ env:
     NODE_VERSION: 18.x
 
 on:
-    - deployment
-    - deployment_status
+    push:
+        branches:
+            - '**'
+    deployment_status:
+        types: [created, completed]
 
 jobs:
-    githubContext:
+    captureBranchName:
         runs-on: ubuntu-latest
-        outputs:
-            branch_name: ${{ steps.get_branch_name.outputs.branch_name }}
+        if: ${{ github.event_name == 'push' }}
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-
-            - name: Dump GitHub context
-              env:
-                  GITHUB_CONTEXT: ${{ toJson(github) }}
-              run: echo "$GITHUB_CONTEXT"
 
             - name: Dump GitHub ref_name
               run: echo ${{ github.ref_name }}
 
-            - name: Get branch name
-              id: get_branch_name
-              run: echo "::set-output name=branch_name::${{ github.ref_name }}"
+            - name: Save branch name
+              run: echo ${{ github.ref_name }} > branch_name.txt
+
+            - name: Upload branch name artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: branch-name
+                  path: branch_name.txt
 
     e2e:
-        needs: githubContext
-        if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
         runs-on: ubuntu-latest
+        if: ${{ github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.sha == github.event.deployment.sha }}
         steps:
             - name: Checkout
               uses: actions/checkout@v2
+
+            - name: Download branch name artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: branch-name
+
+            - name: Read branch name
+              id: read_branch_name
+              run: |
+                  BRANCH_NAME=$(cat branch_name.txt)
+                  echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
             - name: Dump GitHub context
               env:
                   GITHUB_CONTEXT: ${{ toJson(github) }}
               run: echo "$GITHUB_CONTEXT"
-
-            - name: Set branch name from previous job
-              run: echo "BRANCH_NAME=${{ needs.githubContext.outputs.branch_name }}" >> $GITHUB_ENV
 
             - name: Get BRANCH_NAME
               run: echo ${{ env.BRANCH_NAME }}
