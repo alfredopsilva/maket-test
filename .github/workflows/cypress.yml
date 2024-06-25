@@ -7,9 +7,6 @@ on:
     push:
         branches:
             - '**'
-    deployment_status:
-        types: [created, completed]
-
 jobs:
     captureBranchName:
         runs-on: ubuntu-latest
