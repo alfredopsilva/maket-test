@@ -27,6 +27,9 @@ jobs:
               if: ${{ github.event_name == 'deployment_status' }}
               run: echo "BRANCH_NAME=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
 
+            - name: Display Branch name
+              run: echo ${{ BRANCH_NAME }}
+
             - name: Run Cypress 🌲
               uses: cypress-io/github-action@v2
               with:
